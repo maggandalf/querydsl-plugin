@@ -5,14 +5,26 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+
+import com.lordofthejars.querydslplugin.Messages;
 
 public class ConnectionWizardPage extends WizardPage {
 
+	
+	private static final String[] JAR_EXT = new String[]{"*.jar"}; 
+	
 	private Composite container;
 	private Text driverClassName;
 	private Text databaseUrl;
@@ -20,6 +32,8 @@ public class ConnectionWizardPage extends WizardPage {
 	private Text databasePassword;
 	private Text driverLocation;
 
+	
+	
 	protected ConnectionWizardPage(String pageName, String description) {
 		super(pageName);
 		setTitle(pageName);
@@ -35,26 +49,10 @@ public class ConnectionWizardPage extends WizardPage {
 		layout.numColumns = 2;
 		GridData gd = new GridData(GridData.FILL_HORIZONTAL);
 
-		Label driverLocationLabel = new Label(container, SWT.NULL);
-		driverLocationLabel.setText("Jdbc Jar Location");
-		driverLocation = new Text(container, SWT.BORDER | SWT.SINGLE);
-		driverLocation.setText("");
-		driverLocation.setLayoutData(gd);
-		driverLocationLabel.addKeyListener(new KeyListener() {
-			
-			@Override
-			public void keyReleased(KeyEvent arg0) {
-				//TODO change when driver location is set using Browser button.
-				validate();
-			}
-			
-			@Override
-			public void keyPressed(KeyEvent arg0) {
-			}
-		});
-
+		
+		
 		Label driverClassNameLabel = new Label(container, SWT.NULL);
-		driverClassNameLabel.setText("Driver Class Name");
+		driverClassNameLabel.setText(Messages.DriverClassName_label);
 		driverClassName = new Text(container, SWT.BORDER | SWT.SINGLE);
 		driverClassName.setText("");
 		driverClassName.setLayoutData(gd);
@@ -71,7 +69,7 @@ public class ConnectionWizardPage extends WizardPage {
 		});
 
 		Label databaseUrlLabel = new Label(container, SWT.NULL);
-		databaseUrlLabel.setText("Database Url");
+		databaseUrlLabel.setText(Messages.DatabaseUrl_label);
 		databaseUrl = new Text(container, SWT.BORDER | SWT.SINGLE);
 		databaseUrl.setText("");
 		databaseUrl.setLayoutData(gd);
@@ -88,7 +86,7 @@ public class ConnectionWizardPage extends WizardPage {
 		});
 
 		Label databaseUserLabel = new Label(container, SWT.NULL);
-		databaseUserLabel.setText("Database Username");
+		databaseUserLabel.setText(Messages.DatabaseUser_label);
 		databaseUser = new Text(container, SWT.BORDER | SWT.SINGLE);
 		databaseUser.setText("");
 		databaseUser.setLayoutData(gd);
@@ -105,7 +103,7 @@ public class ConnectionWizardPage extends WizardPage {
 		});
 
 		Label databasePasswordLabel = new Label(container, SWT.NULL);
-		databasePasswordLabel.setText("Database Password");
+		databasePasswordLabel.setText(Messages.DatabasePassword_label);
 		databasePassword = new Text(container, SWT.BORDER | SWT.PASSWORD);
 		databasePassword.setText("");
 		databasePassword.setLayoutData(gd);
@@ -118,6 +116,41 @@ public class ConnectionWizardPage extends WizardPage {
 			
 			@Override
 			public void keyPressed(KeyEvent arg0) {
+			}
+		});
+		
+		
+		Label driverLocationLabel = new Label(container, SWT.NULL);
+		driverLocationLabel.setText(Messages.DriverLocation_label);
+		driverLocation = new Text(container, SWT.BORDER | SWT.SINGLE);
+		driverLocation.setText("");
+		driverLocation.setLayoutData(gd);
+		driverLocation.addModifyListener(new ModifyListener() {
+			
+			@Override
+			public void modifyText(ModifyEvent arg0) {
+				validate();
+			}
+		});
+		
+		Button button = new Button(container, SWT.NULL);
+		button.setText(Messages.Browser_button);
+		button.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				FileDialog fileDialog = new FileDialog(container.getShell(), SWT.OPEN);
+				fileDialog.setFilterExtensions(JAR_EXT);
+				String driverPath = fileDialog.open();
+				
+				if(driverPath != null) {
+					driverLocation.setText(driverPath);
+				}
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0) {
+				
 			}
 		});
 		

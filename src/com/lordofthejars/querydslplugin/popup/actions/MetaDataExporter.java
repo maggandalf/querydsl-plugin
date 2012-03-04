@@ -8,12 +8,13 @@ import org.eclipse.ui.IActionDelegate;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.IWorkbenchWindow;
 
 import com.lordofthejars.querydslplugin.ui.ExportMetaDataWizard;
 
 public class MetaDataExporter implements IObjectActionDelegate {
 
-	private IWorkbenchPage workbenchPage;
+	private IWorkbenchWindow workbenchWindow;
 	private Shell shell;
 	
 	/**
@@ -28,7 +29,7 @@ public class MetaDataExporter implements IObjectActionDelegate {
 	 */
 	@Override
 	public void setActivePart(final IAction action, final IWorkbenchPart targetPart) {
-		this.workbenchPage = targetPart.getSite().getPage();
+		this.workbenchWindow = targetPart.getSite().getWorkbenchWindow();
 		this.shell = targetPart.getSite().getShell();
 	}
 
@@ -37,8 +38,8 @@ public class MetaDataExporter implements IObjectActionDelegate {
 	 */
 	@Override
 	public void run(final IAction action) {
-
-		WizardDialog wizardDialog = new WizardDialog(shell, new ExportMetaDataWizard());
+		
+		WizardDialog wizardDialog = new WizardDialog(shell, new ExportMetaDataWizard(this.workbenchWindow.getSelectionService()));
 		wizardDialog.open();
 		
 	}
