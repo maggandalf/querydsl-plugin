@@ -120,19 +120,6 @@ public class ConnectionWizardPage extends WizardPage {
 		});
 		
 		
-		Label driverLocationLabel = new Label(container, SWT.NULL);
-		driverLocationLabel.setText(Messages.DriverLocation_label);
-		driverLocation = new Text(container, SWT.BORDER | SWT.SINGLE);
-		driverLocation.setText("");
-		driverLocation.setLayoutData(gd);
-		driverLocation.addModifyListener(new ModifyListener() {
-			
-			@Override
-			public void modifyText(ModifyEvent arg0) {
-				validate();
-			}
-		});
-		
 		Button button = new Button(container, SWT.NULL);
 		button.setText(Messages.Browser_button);
 		button.addSelectionListener(new SelectionListener() {
@@ -153,6 +140,18 @@ public class ConnectionWizardPage extends WizardPage {
 				
 			}
 		});
+		
+		driverLocation = new Text(container, SWT.BORDER | SWT.SINGLE);
+		driverLocation.setText("");
+		driverLocation.setLayoutData(gd);
+		driverLocation.addModifyListener(new ModifyListener() {
+			
+			@Override
+			public void modifyText(ModifyEvent arg0) {
+				validate();
+			}
+		});
+		
 		
 		// Required to avoid an error in the system
 		setControl(container);
